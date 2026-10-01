@@ -202,19 +202,19 @@ export default function App() {
             <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mr-1">Demo Profiles:</span>
             <button
               onClick={() => applyPreset('tech')}
-              className="px-2.5 py-1 text-xs bg-sky-100 hover:bg-sky-200 text-sky-800 font-semibold rounded-lg transition-colors"
+              className="px-2.5 py-1 text-xs bg-sky-100 hover:bg-sky-200 text-sky-800 font-semibold rounded-lg transition-colors cursor-pointer"
             >
               Tech / IT
             </button>
             <button
               onClick={() => applyPreset('medical')}
-              className="px-2.5 py-1 text-xs bg-rose-100 hover:bg-rose-200 text-rose-800 font-semibold rounded-lg transition-colors"
+              className="px-2.5 py-1 text-xs bg-rose-100 hover:bg-rose-200 text-rose-800 font-semibold rounded-lg transition-colors cursor-pointer"
             >
               Medical
             </button>
             <button
               onClick={() => applyPreset('business')}
-              className="px-2.5 py-1 text-xs bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-semibold rounded-lg transition-colors"
+              className="px-2.5 py-1 text-xs bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-semibold rounded-lg transition-colors cursor-pointer"
             >
               Business
             </button>
@@ -234,7 +234,7 @@ export default function App() {
                     <button
                       key={b.boxNumber}
                       onClick={() => setCurrentBoxIndex(idx)}
-                      className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all ${
+                      className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                         isCurrent
                           ? 'bg-orange-600 text-white shadow-md ring-2 ring-orange-400'
                           : score > 0
@@ -272,7 +272,7 @@ export default function App() {
                 type="button"
                 disabled={currentBoxIndex === 0}
                 onClick={() => setCurrentBoxIndex(prev => Math.max(0, prev - 1))}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-300 bg-white font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm text-sm"
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-300 bg-white font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm text-sm cursor-pointer"
               >
                 <ArrowLeft className="w-4 h-4" />
                 <span>Previous Box</span>
@@ -286,7 +286,7 @@ export default function App() {
                   <button
                     type="button"
                     onClick={() => setActiveTab('results')}
-                    className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 font-bold text-white shadow-md text-sm transition-all"
+                    className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 font-bold text-white shadow-md text-sm transition-all cursor-pointer"
                   >
                     <Sparkles className="w-4 h-4 text-amber-300" />
                     <span>View Top 3 Results</span>
@@ -295,7 +295,7 @@ export default function App() {
                   <button
                     type="button"
                     onClick={() => setCurrentBoxIndex(prev => Math.min(CAREER_BOXES.length - 1, prev + 1))}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 font-bold text-white shadow-md text-sm transition-all"
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 font-bold text-white shadow-md text-sm transition-all cursor-pointer"
                   >
                     <span>Next Box ({currentBoxIndex + 2})</span>
                     <ArrowRight className="w-4 h-4" />
@@ -315,7 +315,7 @@ export default function App() {
               </h3>
               <button
                 onClick={() => setActiveTab('results')}
-                className="flex items-center gap-2 bg-emerald-600 text-white font-bold text-xs px-4 py-2 rounded-xl shadow"
+                className="flex items-center gap-2 bg-emerald-600 text-white font-bold text-xs px-4 py-2 rounded-xl shadow cursor-pointer"
               >
                 <Sparkles className="w-4 h-4" />
                 <span>Calculate Top Clusters</span>
@@ -343,13 +343,14 @@ export default function App() {
           <ClusterResultView
             scores={boxScores}
             student={student}
+            languageMode={languageMode}
             onResetSurvey={handleResetSurvey}
           />
         )}
       </main>
 
       {/* Footer with Creator Attribution & Note */}
-      <footer className="bg-slate-900 text-slate-400 py-8 border-t border-slate-800 text-xs mt-12">
+      <footer className="bg-slate-900 text-slate-400 py-8 border-t border-slate-800 text-xs mt-12 no-print">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="space-y-1 text-center md:text-left">
             <p className="text-slate-200 font-semibold">
