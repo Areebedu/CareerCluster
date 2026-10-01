@@ -3,15 +3,9 @@ import { BoxScore, StudentInfo } from '../types';
 
 export async function generateAICareerAdvice(
   student: StudentInfo,
-  topClusters: BoxScore[],
-  language: 'en' | 'ur' | 'both' = 'both'
+  topClusters: BoxScore[]
 ): Promise<string> {
-  const apiKey = process.env.API_KEY;
-  if (!apiKey) {
-    return "Gemini API key is not configured in the environment. Please proceed with the standard career cluster pathways provided below.";
-  }
-
-  const ai = new GoogleGenAI({ apiKey: apiKey, vertexai: true });
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY, vertexai: true });
 
   const clustersSummary = topClusters.map((c, i) => 
     `${i + 1}. Cluster ${c.boxNumber}: ${c.titleEn} (${c.titleUr}) - Score: ${c.count} items circled`
@@ -25,24 +19,24 @@ Student Details:
 - School: ${student.school || 'Not specified'}
 - Class/Grade: ${student.classGrade || 'Not specified'}
 
-Their top 3 career clusters based on their interests and strengths:
+Their top 3 career clusters based on their survey responses:
 ${clustersSummary}
 
-Provide a comprehensive, inspiring, and actionable career guidance report with:
-1. Analysis of how these top 3 clusters connect with each other.
-2. Top 4 recommended career paths (both in Pakistan and globally).
-3. Recommended university degrees / diplomas to target after Matric/O-Levels or FSc/A-Levels.
-4. Key soft and hard skills to start developing today.
-5. Provide this report in bilingual format: first clean English sections, followed by an inspiring summary in authentic, warm Urdu (اردو خلاصہ اور رہنمائی).
+Provide a comprehensive, inspiring, and actionable career guidance report including:
+1. Synthesis: How these top 3 clusters complement and connect with each other.
+2. Recommended Career Paths: Top 4 promising professions in Pakistan and internationally.
+3. Educational Roadmaps: What subjects and degree paths to choose after Matric/O-Levels or FSc/A-Levels (e.g. Pre-Engineering, Pre-Medical, ICS, I.Com, BS programs).
+4. Practical Next Steps: Key hard and soft skills they should start learning now.
+5. Bilingual Urdu Section: An encouraging and inspiring Urdu summary (اردو رہنمائی اور تجاویز) written in clear, elegant Urdu.
 
-Keep the formatting clean with markdown headings and bullet points.`;
+Format cleanly with markdown headings and bullet points.`;
 
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
       config: {
-        systemInstruction: 'You are an inspiring, warm, and highly practical educational and career mentor helping young students discover their passion.',
+        systemInstruction: 'You are an inspiring, warm, and highly practical educational and career mentor helping young students discover their strengths and future careers.',
         temperature: 0.7,
       }
     });
@@ -50,6 +44,6 @@ Keep the formatting clean with markdown headings and bullet points.`;
     return response.text || "No guidance generated.";
   } catch (err: any) {
     console.error("Gemini generation error:", err);
-    throw new Error(err.message || "Failed to generate AI guidance.");
+    throw new Error(err.message || "Unable to contact the AI Career Counselor. Please check your network connection.");
   }
 }
