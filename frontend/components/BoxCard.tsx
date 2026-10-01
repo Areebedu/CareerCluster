@@ -1,5 +1,5 @@
 import React from 'react';
-import { Check, Circle, Sparkles, BookOpen, UserCheck, HeartHandshake } from 'lucide-react';
+import { Check, Sparkles, BookOpen, UserCheck } from 'lucide-react';
 import { BoxDefinition, LanguageMode } from '../types';
 
 interface BoxCardProps {
