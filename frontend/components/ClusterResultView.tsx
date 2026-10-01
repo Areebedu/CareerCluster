@@ -1,21 +1,19 @@
 import React, { useState } from 'react';
-import { Trophy, Award, Sparkles, Printer, RefreshCw, Bot, ChevronRight, CheckCircle, ExternalLink, Compass } from 'lucide-react';
+import { Trophy, Sparkles, Printer, RefreshCw, Bot, ChevronRight } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
-import { BoxScore, StudentInfo, LanguageMode } from '../types';
+import { BoxScore, StudentInfo } from '../types';
 import { CAREER_BOXES } from '../surveyData';
 import { generateAICareerAdvice } from '../services/geminiService';
 
 interface ClusterResultViewProps {
   scores: BoxScore[];
   student: StudentInfo;
-  languageMode: LanguageMode;
   onResetSurvey: () => void;
 }
 
 export const ClusterResultView: React.FC<ClusterResultViewProps> = ({
   scores,
   student,
-  languageMode,
   onResetSurvey,
 }) => {
   const [aiReport, setAiReport] = useState<string>('');
@@ -25,7 +23,6 @@ export const ClusterResultView: React.FC<ClusterResultViewProps> = ({
   // Sort scores descending
   const sortedScores = [...scores].sort((a, b) => b.count - a.count);
   const topThree = sortedScores.slice(0, 3);
-  const highestScore = Math.max(...scores.map(s => s.count), 1);
 
   const chartData = sortedScores.map((s, idx) => ({
     name: `Box ${s.boxNumber}`,
