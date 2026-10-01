@@ -147,7 +147,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <Sparkles className="w-4 h-4 text-amber-300" />
                 <span>Results & Top 3</span>
                 {totalAnswered > 0 && (
-                  <span className="bg-amber-400 text-slate-900 text-[10px] font-black rounded-full px-1.5 py-0.2">
+                  <span className="bg-amber-400 text-slate-900 text-[10px] font-black rounded-full px-1.5 py-0.5">
                     {totalAnswered}
                   </span>
                 )}
