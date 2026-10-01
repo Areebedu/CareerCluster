@@ -5,8 +5,6 @@ export async function generateAICareerAdvice(
   student: StudentInfo,
   topClusters: BoxScore[]
 ): Promise<string> {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY, vertexai: true });
-
   const clustersSummary = topClusters.map((c, i) => 
     `${i + 1}. Cluster ${c.boxNumber}: ${c.titleEn} (${c.titleUr}) - Score: ${c.count} items circled`
   ).join("\n");
@@ -32,6 +30,7 @@ Provide a comprehensive, inspiring, and actionable career guidance report includ
 Format cleanly with markdown headings and bullet points.`;
 
   try {
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY, vertexai: true });
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
@@ -44,6 +43,6 @@ Format cleanly with markdown headings and bullet points.`;
     return response.text || "No guidance generated.";
   } catch (err: any) {
     console.error("Gemini generation error:", err);
-    throw new Error(err.message || "Unable to contact the AI Career Counselor. Please check your network connection.");
+    throw new Error(err?.message || "AI Career Counselor is currently unavailable. Please verify your network connection.");
   }
 }
