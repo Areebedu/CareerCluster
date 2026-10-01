@@ -5,7 +5,7 @@ import { BoxCard } from './components/BoxCard';
 import { ClusterResultView } from './components/ClusterResultView';
 import { CAREER_BOXES } from './surveyData';
 import { StudentInfo, LanguageMode, BoxScore } from './types';
-import { ArrowLeft, ArrowRight, CheckCircle2, Sparkles, SlidersHorizontal, Info } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Sparkles, Info } from 'lucide-react';
 
 const STORAGE_KEY = 'career_survey_v1_selection';
 const STUDENT_STORAGE_KEY = 'career_survey_v1_student';
@@ -119,14 +119,12 @@ export default function App() {
   const applyPreset = (type: 'tech' | 'medical' | 'arts' | 'business') => {
     const newSelection = new Set<string>();
     if (type === 'tech') {
-      // Box 11 & 15
       CAREER_BOXES.find(b => b.boxNumber === 11)?.activities.forEach(a => newSelection.add(a.id));
       CAREER_BOXES.find(b => b.boxNumber === 11)?.personalQualities.forEach(q => newSelection.add(q.id));
       CAREER_BOXES.find(b => b.boxNumber === 15)?.activities.slice(0, 5).forEach(a => newSelection.add(a.id));
       CAREER_BOXES.find(b => b.boxNumber === 15)?.schoolSubjects.forEach(s => newSelection.add(s.id));
       setStudent(s => ({ ...s, name: s.name || 'Ahmed Raza', classGrade: '10th Matric (Computer Science)' }));
     } else if (type === 'medical') {
-      // Box 8 & 1
       CAREER_BOXES.find(b => b.boxNumber === 8)?.activities.forEach(a => newSelection.add(a.id));
       CAREER_BOXES.find(b => b.boxNumber === 8)?.personalQualities.forEach(q => newSelection.add(q.id));
       CAREER_BOXES.find(b => b.boxNumber === 8)?.schoolSubjects.forEach(s => newSelection.add(s.id));
@@ -185,7 +183,7 @@ export default function App() {
           totalCircled={totalCircledCount}
         />
 
-        {/* Survey Instructions Callout (Adapted from Form Instructions) */}
+        {/* Survey Instructions Callout */}
         <div className="bg-amber-50/80 border border-amber-200/90 rounded-2xl p-4 sm:p-5 mb-6 text-xs sm:text-sm text-slate-800 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="flex items-start gap-3">
             <Info className="w-5 h-5 text-amber-700 shrink-0 mt-0.5" />
@@ -246,7 +244,7 @@ export default function App() {
                     >
                       <span>Box {b.boxNumber}</span>
                       {score > 0 && (
-                        <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-extrabold ${
+                        <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-extrabold ${
                           isCurrent ? 'bg-white text-orange-700' : 'bg-orange-500 text-white'
                         }`}>
                           {score}
@@ -345,7 +343,6 @@ export default function App() {
           <ClusterResultView
             scores={boxScores}
             student={student}
-            languageMode={languageMode}
             onResetSurvey={handleResetSurvey}
           />
         )}
