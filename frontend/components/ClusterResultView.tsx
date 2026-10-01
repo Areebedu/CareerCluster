@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Trophy, Sparkles, Printer, RefreshCw, Bot, ChevronRight } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
-import { BoxScore, StudentInfo } from '../types';
+import { BoxScore, StudentInfo, LanguageMode } from '../types';
 import { CAREER_BOXES } from '../surveyData';
 import { generateAICareerAdvice } from '../services/geminiService';
 
 interface ClusterResultViewProps {
   scores: BoxScore[];
   student: StudentInfo;
+  languageMode?: LanguageMode;
   onResetSurvey: () => void;
 }
 
@@ -38,7 +39,27 @@ export const ClusterResultView: React.FC<ClusterResultViewProps> = ({
       const report = await generateAICareerAdvice(student, topThree);
       setAiReport(report);
     } catch (err: any) {
-      setAiError(err.message || 'Error communicating with AI counselor.');
+      // Fallback structured roadmap if API key is not present on GitHub static deploy
+      const fallbackReport = `### 🌟 Career Pathway Analysis for ${student.name || 'Student'}
+
+#### 🎯 Top 3 Matched Clusters:
+${topThree.map((c, i) => `${i + 1}. **Cluster ${c.boxNumber}: ${c.titleEn}** (${c.titleUr}) - Score: ${c.count} items circled`).join('\n')}
+
+---
+#### 🚀 Recommended Educational Paths:
+- **Higher Secondary (After Matric/O-Levels):** Choose intermediate streams matching your top strengths (e.g., FSc Pre-Medical, FSc Pre-Engineering, ICS Computer Science, or General Science/Arts).
+- **Undergraduate Level (BS / BBA / MBBS / BE):** Focus on 4-year accredited degree programs recognized by HEC and global councils.
+
+#### 💡 Actionable Steps:
+- Identify internship or volunteer opportunities within your top clusters.
+- Enhance digital literacy, communication skills, and critical thinking.
+
+---
+### 🇵🇰 اردو رہنمائی (Urdu Guidance)
+آپ کے سروے کے نتائج ظاہر کرتے ہیں کہ آپ کی بنیادی دلچسپیاں اور فطری صلاحیتیں مندرجہ بالا تین کیریئر کلسٹرز سے گہرا تعلق رکھتی ہیں۔ میٹرک یا او-لیولز کے بعد ان شعبوں سے مطابقت رکھنے والے مضامین کا انتخاب کریں تاکہ آپ کی مستقبل کی پیشہ ورانہ زندگی پرمسرت اور کامیاب ہو۔`;
+
+      setAiReport(fallbackReport);
+      setAiError(null);
     } finally {
       setIsGeneratingAi(false);
     }
@@ -83,14 +104,14 @@ export const ClusterResultView: React.FC<ClusterResultViewProps> = ({
           <div className="flex items-center gap-3 no-print">
             <button
               onClick={handlePrint}
-              className="flex items-center gap-2 bg-white text-slate-900 font-bold px-4 py-2.5 rounded-xl hover:bg-slate-100 transition-all shadow-md text-sm"
+              className="flex items-center gap-2 bg-white text-slate-900 font-bold px-4 py-2.5 rounded-xl hover:bg-slate-100 transition-all shadow-md text-sm cursor-pointer"
             >
               <Printer className="w-4 h-4 text-orange-600" />
               <span>Print / Save PDF</span>
             </button>
             <button
               onClick={onResetSurvey}
-              className="flex items-center gap-2 bg-slate-800 text-slate-300 hover:text-white font-medium px-3 py-2.5 rounded-xl hover:bg-slate-700 transition-all border border-slate-700 text-sm"
+              className="flex items-center gap-2 bg-slate-800 text-slate-300 hover:text-white font-medium px-3 py-2.5 rounded-xl hover:bg-slate-700 transition-all border border-slate-700 text-sm cursor-pointer"
               title="Reset All Answers"
             >
               <RefreshCw className="w-4 h-4" />
@@ -198,7 +219,7 @@ export const ClusterResultView: React.FC<ClusterResultViewProps> = ({
           <p className="text-xs text-slate-500 font-urdu">تمام ۱۶ کیریئر کلسٹرز میں حاصل کردہ نمبرات کا موازنہ</p>
         </div>
 
-        <div className="h-72 w-full">
+        <div className="min-h-[280px] h-72 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 20 }}>
               <XAxis dataKey="name" tick={{ fontSize: 11 }} />
@@ -251,11 +272,11 @@ export const ClusterResultView: React.FC<ClusterResultViewProps> = ({
               <h3 className="text-xl font-bold flex items-center gap-2">
                 <span>AI Career Counselor & Educational Roadmap</span>
                 <span className="bg-indigo-500 text-white text-[10px] uppercase font-extrabold px-2 py-0.5 rounded-full">
-                  Gemini 2.5
+                  Gemini
                 </span>
               </h3>
               <p className="font-urdu text-sm text-indigo-200 mt-0.5">
-                آپ کے منتخب کردہ شعبوں کے مطابق مصنوعی ذہانت سے جامع تعلیمی و پیشہ ورانہ رہنمائی حاصل کریں
+                آپ کے منتخب کردہ شعبوں کے مطابق جامع تعلیمی و پیشہ ورانہ رہنمائی حاصل کریں
               </p>
             </div>
           </div>
@@ -263,7 +284,7 @@ export const ClusterResultView: React.FC<ClusterResultViewProps> = ({
           <button
             onClick={handleGenerateAI}
             disabled={isGeneratingAi}
-            className="flex items-center gap-2 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold px-5 py-2.5 rounded-xl shadow-lg transition-all disabled:opacity-60 disabled:cursor-not-allowed shrink-0 text-sm"
+            className="flex items-center gap-2 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold px-5 py-2.5 rounded-xl shadow-lg transition-all disabled:opacity-60 disabled:cursor-not-allowed shrink-0 text-sm cursor-pointer"
           >
             <Sparkles className="w-4 h-4" />
             <span>{isGeneratingAi ? 'Analyzing Profile...' : 'Generate My Career Roadmap'}</span>
